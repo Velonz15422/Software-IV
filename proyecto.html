@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manejo de proyecto</title>  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+<div class="container">
+    <div class="perfil">
+        <div id="fecha"></div>
+        <h1>Bienvenido </h1>
+        <span>Vamos a organizar tu proyecto!</span>
+        <div>
+            <label for="opciones">Elige una opción:</label>
+            <select id="opciones">
+                <option value="0">Seleccione una opción</option>
+                <optgroup label="1. Requirements">
+                    <option value="a">Stability</option>
+                    <option value="b">Completeness</option>
+                    <option value="c">Clarity</option>
+                    <option value="d">Validity</option>
+                    <option value="e">Feasibility</option>
+                    <option value="f">Precedent</option>
+                    <option value="g">Scale</option>
+                </optgroup>
+                <optgroup label="2. Design">
+                    <option value="a">Functionality</option>
+                    <option value="b">Difficulty</option>
+                    <option value="c">Interfaces</option>
+                    <option value="d">Performance</option>
+                    <option value="e">Testability</option>
+                    <option value="f">Hardware Constraints</option>
+                    <option value="g">Non-Developmental Software</option>
+                </optgroup>
+                <optgroup label="3. Code and Unit Test">
+                    <option value="a">Feasibility</option>
+                    <option value="b">Testing</option>
+                    <option value="c">Coding/Implementation</option>
+                </optgroup>
+                <optgroup label="4. Integration and Test">
+                    <option value="a">Environment</option>
+                    <option value="b">Product</option>
+                    <option value="c">System</option>
+                </optgroup>
+                <optgroup label="5. Engineering Specialties">
+                    <option value="a">Maintainability</option>
+                    <option value="b">Reliability</option>
+                    <option value="c">Safety</option>
+                    <option value="d">Security</option>
+                    <option value="e">Human Factors</option>
+                    <option value="f">Specifications</option>
+                </optgroup>
+                <optgroup label="B. Development Environment">
+                    <option value="1">Development Process</option>
+                    <option value="2">Development System</option>
+                    <option value="3">Management Process</option>
+                    <option value="4">Management Methods</option>
+                    <option value="5">Work Environment</option>
+                </optgroup>
+                <optgroup label="C. Program Constraints">
+                    <option value="1">Resources</option>
+                    <option value="2">Contract</option>
+                    <option value="3">Program Interfaces</option>
+                </optgroup>
+            </select>
+        </div>
+    </div>
+
+    <div class="agregar-tarea">
+        <input type="text" id="input" placeholder="Agregar un riesgo">
+        <i id="boton-enter"class="fas fa-plus-circle"></i>
+    </div>
+
+    
+    <div class="seccion-tarea">
+        <h3>Estos son los riesgos de tu proyecto </h3>
+        <ul id="lista">
+            <!-- <li id="elemento">
+                <i class="far fa-circle co" data="realizado" id="0"></i>
+                <p class="text"> Hacer la tarea de matematicas </p>
+                <i class="fas fa-trash de" data="eliminado" id="0"></i> 
+            </li>
+            <li id="elemento">
+                <i class="far fa-circle co" data="realizado" id="0"></i>
+                <p class="text"> Lavar la ropa </p>
+                <i class="fas fa-trash de" data="eliminado" id="0"></i> 
+            </li> -->
+        </ul>
+    </div>   
+</div>
+<script src="proyecto.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Agregar Proyecto</title>
+    <link rel="stylesheet" href="style.css"> </link>
+</head>
+<body>
+	<!-- Sección para el formulario de agregar proyecto -->
+	<h1>Agregar Proyecto</h1>
+	<form onsubmit="return agregarProyecto()">
+		<label for="titulo">Título del Proyecto:</label>
+		<input type="text" id="titulo" name="titulo" required>
+
+		<label for="descripcion">Descripción del Proyecto:</label>
+		<textarea id="descripcion" name="descripcion" rows="5" required></textarea>
+
+		<input type="submit" value="Agregar Proyecto">
+	</form>
+
+	<!-- Sección para mostrar la lista de proyectos -->
+	<div id="proyectos">
+		<!-- Esta sección se llenará dinámicamente con los proyectos agregados -->
+	</div>
+
+	<!-- Scripts -->
+	<script>
+		// Variable global para almacenar los proyectos
+		var proyectos = [];
+
+		// Al cargar la página, recuperar los proyectos almacenados en el almacenamiento local (si hay alguno)
+		var proyectosGuardados = localStorage.getItem("proyectos");
+		if (proyectosGuardados) {
+			proyectos = JSON.parse(proyectosGuardados);
+			actualizarListaProyectos();
+		}
+
+		// Función para agregar un proyecto
+		function agregarProyecto() {
+			event.preventDefault();
+			var titulo = document.getElementById("titulo").value;
+			var descripcion = document.getElementById("descripcion").value;
+
+			var proyecto = {
+				titulo: titulo,
+				descripcion: descripcion,
+				riesgos: []
+			};
+
+			proyectos.push(proyecto);
+
+			// Limpiar los campos del formulario
+			document.getElementById("titulo").value = "";
+			document.getElementById("descripcion").value = "";
+
+			// Guardar los proyectos en el almacenamiento local
+			localStorage.setItem("proyectos", JSON.stringify(proyectos));
+
+			// Actualizar la lista de proyectos
+			actualizarListaProyectos();
+
+			return false;
+		}
+
+		// Función para actualizar la lista de proyectos
+		function actualizarListaProyectos() {
+			var listaProyectos = document.getElementById("proyectos");
+
+			// Limpiar la lista de proyectos
+			listaProyectos.innerHTML = "";
+
+			// Agregar cada proyecto como un nuevo elemento en la lista
+			for (var i = 0; i < proyectos.length; i++) {
+				var proyecto = proyectos[i];
+				var proyectoHTML = '<div class="proyecto">' + 
+					'<h2>' + proyecto.titulo + '</h2>' +
+								'<p>' + proyecto.descripcion + '</p>' +
+								'<a href="#" onclick="agregarRiesgo(' + i + ')">Gestionar Proyecto</a>';
+			if (proyecto.riesgos.length > 0) {
+				proyectoHTML += '<ul>';
+				for (var j = 0; j < proyecto.riesgos.length; j++) {
+					proyectoHTML += '<li>' + proyecto.riesgos[j] + '</li>';
+				}
+				proyectoHTML += '</ul>';
+			}
+			proyectoHTML += '</div>';
+			listaProyectos.innerHTML += proyectoHTML;
+		}
+	}
+
+	// Función para cargar los proyectos desde local storage
+	function cargarProyectos() {
+		var proyectosGuardados = localStorage.getItem("proyectos");
+		if (proyectosGuardados !== null) {
+			proyectos = JSON.parse(proyectosGuardados);
+			actualizarListaProyectos();
+		}
+	}
+
+	// Cargar los proyectos al cargar la página
+	cargarProyectos();
+
+	// Función para agregar un riesgo a un proyecto
+	function agregarRiesgo(index) {
+		event.preventDefault();
+		window.location.href = "proyecto.html"
+	}
+</script>
+</body>
+</html>
+									
