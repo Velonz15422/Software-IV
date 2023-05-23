@@ -2,7 +2,14 @@
 <html>
 <head>
 	<title>Agregar Proyecto</title>
-    <link rel="stylesheet" href="style.css"> </link>
+	<link rel="stylesheet" href="style.css"> </link>
+	<style>
+		.proyecto {
+			margin-bottom: 20px;
+			padding: 10px;
+			border: 1px solid #ccc;
+		}
+	</style>
 </head>
 <body>
 	<!-- Sección para el formulario de agregar proyecto -->
@@ -73,38 +80,39 @@
 				var proyecto = proyectos[i];
 				var proyectoHTML = '<div class="proyecto">' + 
 					'<h2>' + proyecto.titulo + '</h2>' +
-								'<p>' + proyecto.descripcion + '</p>' +
-								'<a href="#" onclick="agregarRiesgo(' + i + ')">Gestionar Proyecto</a>';
-			if (proyecto.riesgos.length > 0) {
-				proyectoHTML += '<ul>';
-				for (var j = 0; j < proyecto.riesgos.length; j++) {
-					proyectoHTML += '<li>' + proyecto.riesgos[j] + '</li>';
+					'<p>' + proyecto.descripcion + '</p>' +
+					'<a href="#" onclick="agregarRiesgo(' + i + ')">Gestionar Proyecto</a>';
+					
+				if (proyecto.riesgos.length > 0) {
+					proyectoHTML += '<ul>';
+					for (var j = 0; j < proyecto.riesgos.length; j++) {
+						proyectoHTML += '<li>' + proyecto.riesgos[j] + '</li>';
+					}
+					proyectoHTML += '</ul>';
 				}
-				proyectoHTML += '</ul>';
+				
+				proyectoHTML += '</div>';
+				listaProyectos.innerHTML += proyectoHTML;
 			}
-			proyectoHTML += '</div>';
-			listaProyectos.innerHTML += proyectoHTML;
 		}
-	}
 
-	// Función para cargar los proyectos desde local storage
-	function cargarProyectos() {
-		var proyectosGuardados = localStorage.getItem("proyectos");
-		if (proyectosGuardados !== null) {
-			proyectos = JSON.parse(proyectosGuardados);
-			actualizarListaProyectos();
+		// Función para cargar los proyectos desde el almacenamiento local
+		function cargarProyectos() {
+			var proyectosGuardados = localStorage.getItem("proyectos");
+			if (proyectosGuardados !== null) {
+				proyectos = JSON.parse(proyectosGuardados);
+				actualizarListaProyectos();
+			}
 		}
-	}
 
-	// Cargar los proyectos al cargar la página
-	cargarProyectos();
+		// Cargar los proyectos al cargar la página
+		cargarProyectos();
 
-	// Función para agregar un riesgo a un proyecto
-	function agregarRiesgo(index) {
-		event.preventDefault();
-		window.location.href = "proyecto.html"
-	}
-</script>
+		// Función para agregar un riesgo a un proyecto
+		function agregarRiesgo(index) {
+			event.preventDefault();
+			window.location.href = "proyecto.html";
+		}
+	</script>
 </body>
 </html>
-									

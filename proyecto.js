@@ -1,144 +1,151 @@
-const fecha = document.querySelector('#fecha')
-const lista = document.querySelector('#lista')
-const elemento = document.querySelector('#elemento')
-const input = document.querySelector('#input')
-const botonEnter = document.querySelector('#boton-enter')
-const check = 'fa-check-circle'
-const uncheck = 'fa-circle'
-const lineThrough = 'line-through'
-let LIST
+const fecha = document.querySelector('#fecha');
+const lista = document.querySelector('#lista');
+const input = document.querySelector('#input');
+const botonEnter = document.querySelector('#boton-enter');
+const check = 'fa-check-circle';
+const uncheck = 'fa-circle';
+const lineThrough = 'line-through';
+let LIST = [];
+let id = 0;
 
-let id // para que inicie en 0 cada tarea tendra un id diferente
+// Creación de fecha actualizada
+const FECHA = new Date();
+fecha.innerHTML = FECHA.toLocaleDateString('es-MX', {
+  weekday: 'long',
+  month: 'short',
+  day: 'numeric'
+});
 
-//creacion de fecha actualizada 
+// Función para agregar una tarea
+function agregarTarea(tarea, importancia, realizado, eliminado, votes) {
+  if (eliminado) {
+    return;
+  }
 
-const FECHA = new Date ()
-fecha.innerHTML = FECHA.toLocaleDateString('es-MX',{weekday: 'long', month: 'short', day:'numeric'})
+  const REALIZADO = realizado ? check : uncheck;
+  const LINE = realizado ? lineThrough : '';
 
+  const importanciaOption = document.querySelector(`option[value="${importancia}"]`);
+  const importanciaText = importanciaOption ? importanciaOption.innerText : '';
 
+  const elemento = `
+    <li>
+      <i class="far ${REALIZADO} co" data-action="realizado" data-id="${id}"></i>
+      <p class="text ${LINE}">${importanciaText} - ${tarea}</p>
+      <span class="votes">${votes || 0}</span>
+      <button class="vote-button" data-action="votar" data-id="${id}">Votar</button>
+      <i class="fas fa-trash de" data-action="eliminar" data-id="${id}"></i>
+    </li>
+  `;
 
-
-
-
-
-// funcion de agregar tarea 
-
-function agregarTarea( tarea,id,realizado,eliminado) {
-    if(eliminado) {return} // si existe eliminado es true si no es false 
-
-    const REALIZADO = realizado ? check : uncheck // si realizado es verdadero check si no uncheck
-
-    const LINE = realizado ? lineThrough : '' 
-
-    const elemento = `
-                        <li id="elemento">
-                        <i class="far ${REALIZADO}" data="realizado" id="${id}"></i>
-                        <p class="text ${LINE}">${tarea}</p>
-                        <i class="fas fa-trash de" data="eliminado" id="${id}"></i> 
-                        </li>
-                    `
-    lista.insertAdjacentHTML("beforeend",elemento)
-
+  lista.insertAdjacentHTML('beforeend', elemento);
 }
 
-
-// funcion de Tarea Realizada 
-
+// Función para marcar una tarea como realizada o no realizada
 function tareaRealizada(element) {
-    element.classList.toggle(check)
-    element.classList.toggle(uncheck)
-    element.parentNode.querySelector('.text').classList.toggle(lineThrough)
-    LIST[element.id].realizado = LIST[element.id].realizado ?false :true //Si
-   // console.log(LIST)
-   // console.log(LIST[element.id])
-   // console.log(LIST[element.id].realizado)
+  element.classList.toggle(check);
+  element.classList.toggle(uncheck);
+  element.parentNode.querySelector('.text').classList.toggle(lineThrough);
+  LIST[element.dataset.id].realizado = !LIST[element.dataset.id].realizado;
+  guardarListaTareas();
 }
 
-function tareaEliminada(element){
-   // console.log(element.parentNode)
-   // console.log(element.parentNode.parentNode)
-    element.parentNode.parentNode.removeChild(element.parentNode)
-    LIST[element.id].eliminado = true
-    console.log(LIST)
+// Función para eliminar una tarea
+function tareaEliminada(element) {
+  const confirmacion = confirm('¿Estás seguro de que deseas eliminar este riesgo?');
+  if (confirmacion) {
+    const taskId = element.dataset.id;
+    element.parentNode.parentNode.removeChild(element.parentNode);
+    LIST.splice(taskId, 1);
+    id--;
+    guardarListaTareas();
+  }
 }
 
+// Evento al hacer clic en el botón "Enter"
+botonEnter.addEventListener('click', () => {
+  const tarea = input.value;
+  const importancia = document.querySelector('#opciones').value;
 
+  if (tarea && importancia) {
+    agregarTarea(tarea, importancia, false, false, 0);
+    LIST.push({
+      nombre: tarea,
+      importancia: importancia,
+      realizado: false,
+      eliminado: false,
+      votes: 0
+    });
+    guardarListaTareas();
+    id++;
+    input.value = '';
+  }
+});
 
+// Evento al presionar la tecla "Enter" en el campo de entrada
+input.addEventListener('keyup', (event) => {
+  if (event.key === 'Enter') {
+    const tarea = input.value;
+    const importancia = document.querySelector('#opciones').value;
 
-
-// crear un evento para escuchar el enter y para habilitar el boton 
-
-botonEnter.addEventListener('click', ()=> {
-    const tarea = input.value
-    if(tarea){
-        agregarTarea(tarea,id,false,false)
-        LIST.push({
-            nombre : tarea,
-            id : id,
-            realizado : false,
-            eliminado : false
-        })
-        localStorage.setItem('TODO',JSON.stringify(LIST))
-        id++
-        input.value = ''
+    if (tarea && importancia) {
+      agregarTarea(tarea, importancia, false, false, 0);
+      LIST.push({
+        nombre: tarea,
+        importancia: importancia,
+        realizado: false,
+        eliminado: false,
+        votes: 0
+      });
+      guardarListaTareas();
+      id++;
+      input.value = '';
     }
+  }
+});
 
-})
+// Evento al hacer clic en la lista de tareas
+lista.addEventListener('click', (event) => {
+  const element = event.target;
+  const elementAction = element.dataset.action;
 
-document.addEventListener('keyup', function (event) {
-    if (event.key=='Enter'){
-        const tarea = input.value
-        if(tarea) {
-            agregarTarea(tarea,id,false,false)
-        LIST.push({
-            nombre : tarea,
-            id : id,
-            realizado : false,
-            eliminado : false
-        })
-        localStorage.setItem('TODO',JSON.stringify(LIST))
-     
-        input.value = ''
-        id++
-        console.log(LIST)
-        }
+  if (elementAction === 'realizado') {
+    tareaRealizada(element);
+  } else if (elementAction === 'votar') {
+    const taskId = element.dataset.id;
+    const votesElement = element.parentNode.querySelector('.votes');
+    const currentVotes = parseInt(votesElement.textContent);
+    votesElement.textContent = currentVotes + 1;
+    LIST[taskId].votes = currentVotes + 1;
+    guardarListaTareas();
+    ordenarPorVotacion();
+  } else if (elementAction === 'eliminar') {
+    tareaEliminada(element);
+  }
+});
+
+// Función para cargar las tareas almacenadas en el local storage
+function cargarTareas() {
+  if (localStorage.getItem('TODO')) {
+    LIST = JSON.parse(localStorage.getItem('TODO'));
+    id = LIST.length;
+
+    for (let i = 0; i < LIST.length; i++) {
+      const task = LIST[i];
+      agregarTarea(task.nombre, task.importancia, task.realizado, task.eliminado, task.votes);
     }
-    
-})
-
-
-lista.addEventListener('click',function(event){
-    const element = event.target 
-    const elementData = element.attributes.data.value
-    console.log(elementData)
-    
-    if(elementData == 'realizado') {
-        tareaRealizada(element)
-    }
-    else if(elementData == 'eliminado') {
-        tareaEliminada(element)
-        console.log("elimnado")
-    }
-    localStorage.setItem('TODO',JSON.stringify(LIST))
-})
-
-
-
-
-let data = localStorage.getItem('TODO')
-if(data){
-    LIST = JSON.parse(data)
-    console.log(LIST)
-    id = LIST.length
-    cargarLista(LIST)
-}else {
-    LIST = []
-    id = 0
+  }
 }
 
-
-function cargarLista(array) {
-    array.forEach(function(item){
-        agregarTarea(item.nombre,item.id,item.realizado,item.eliminado)
-    })
+// Función para ordenar los riesgos por votación
+function ordenarPorVotacion() {
+  LIST.sort((a, b) => b.votes - a.votes);
+  guardarListaTareas();
 }
+
+// Función para guardar la lista de tareas en el almacenamiento local
+function guardarListaTareas() {
+  localStorage.setItem('TODO', JSON.stringify(LIST));
+}
+
+cargarTareas();

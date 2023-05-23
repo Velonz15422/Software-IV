@@ -6,20 +6,20 @@
     <script type="text/javascript" src="inicio.js"></script> 
 </head>
 <body>
+	<div class="container">
+		<h1>Formulario de Acceso</h1>
+		<form onsubmit="login(event)">
+			<label for="login-username">Nombre de Usuario:</label>
+			<input type="text" id="login-username" name="username"><br><br>
 
-	<h1>Formulario de Acceso</h1>
-	<form onsubmit="login()">
-		<label for="login-username">Nombre de Usuario:</label>
-		<input type="text" id="login-username" name="username"><br><br>
+			<label for="login-password">Contraseña:</label>
+			<input type="password" id="login-password" name="password"><br><br>
 
-		<label for="login-password">Contraseña:</label>
-		<input type="password" id="login-password" name="password"><br><br>
+			<input type="submit" value="Iniciar Sesión">
+	        <p id="message">No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+		</form>
+	</div>
 
-		<input type="submit" value="Iniciar Sesión">
-        <p>No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
-
-	</form>
-
-
+	<script src="inicio.js"></script>
 </body>
 </html>
